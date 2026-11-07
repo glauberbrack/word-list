@@ -3,10 +3,14 @@ import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useAdjacentWords } from '@/hooks/use-adjacent-words';
+import { useIsFavorite, useToggleFavorite } from '@/hooks/use-favorites';
+import { useRecordView } from '@/hooks/use-history';
 import { usePrefetchWordDetail, useWordDetail } from '@/hooks/use-word-detail';
+import { useWordNeighbors } from '@/hooks/use-word-neighbors';
 import { colors, spacing, typography } from '@/theme';
 
+import { replaceWordDetail } from '../actions/open-word-detail';
+import { FavoriteButton } from '../components/favorite-button';
 import { WordCard } from '../components/word-card';
 import { WordDetailBody } from '../components/word-detail-body';
 import { WordNavigation } from '../components/word-navigation';
@@ -14,20 +18,22 @@ import { WordNavigation } from '../components/word-navigation';
 type TWordDetailScreenProps = {
   word: string;
   id: number | null;
+  source: TWordSource;
 };
 
-function openWord(entry: TWordEntry) {
-  router.setParams({ word: entry.word, id: String(entry.id) });
-}
-
-export function WordDetailScreen({ word, id }: TWordDetailScreenProps) {
+export function WordDetailScreen({ word, id, source }: TWordDetailScreenProps) {
   const detail = useWordDetail(word);
-  const adjacent = useAdjacentWords(id);
+  const { previous, next } = useWordNeighbors(source, word, id);
   const prefetchWordDetail = usePrefetchWordDetail();
+  const isFavorite = useIsFavorite(word);
+  const toggleFavorite = useToggleFavorite();
+  const recordView = useRecordView();
 
-  const previous = adjacent.data?.previous ?? null;
-  const next = adjacent.data?.next ?? null;
   const phonetic = detail.data?.status === 'found' ? detail.data.detail.phonetic : null;
+
+  useEffect(() => {
+    recordView(word);
+  }, [word, recordView]);
 
   useEffect(() => {
     if (next) void prefetchWordDetail(next.word);
@@ -46,12 +52,16 @@ export function WordDetailScreen({ word, id }: TWordDetailScreenProps) {
         </Pressable>
       </View>
       <ScrollView key={word} contentContainerStyle={styles.content}>
-        <WordCard word={word} phonetic={phonetic} />
+        <WordCard
+          word={word}
+          phonetic={phonetic}
+          action={<FavoriteButton active={isFavorite} onPress={() => toggleFavorite(word)} />}
+        />
         <WordDetailBody word={word} query={detail} />
       </ScrollView>
       <WordNavigation
-        onPrevious={previous ? () => openWord(previous) : undefined}
-        onNext={next ? () => openWord(next) : undefined}
+        onPrevious={previous ? () => replaceWordDetail(previous) : undefined}
+        onNext={next ? () => replaceWordDetail(next) : undefined}
       />
     </SafeAreaView>
   );

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, radius, spacing, typography } from '@/theme';
@@ -5,11 +6,13 @@ import { colors, radius, spacing, typography } from '@/theme';
 type TWordCardProps = {
   word: string;
   phonetic: string | null;
+  action?: ReactNode;
 };
 
-export function WordCard({ word, phonetic }: TWordCardProps) {
+export function WordCard({ word, phonetic, action }: TWordCardProps) {
   return (
     <View style={styles.card}>
+      {action ? <View style={styles.action}>{action}</View> : null}
       <Text style={styles.word} accessibilityRole="header">
         {word}
       </Text>
@@ -27,6 +30,11 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
+  },
+  action: {
+    position: 'absolute',
+    top: spacing.sm,
+    right: spacing.sm,
   },
   word: {
     ...typography.title,
