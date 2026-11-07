@@ -10,7 +10,7 @@ export default function RootLayout() {
       <StatusBar style="dark" />
       <Stack screenOptions={{ contentStyle: { backgroundColor: colors.background } }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="word/[word]" options={{ presentation: 'modal', title: '' }} />
+        <Stack.Screen name="word/[word]" options={{ presentation: 'modal', headerShown: false }} />
       </Stack>
     </AppProviders>
   );
