@@ -1,24 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
-import { Suspense, useMemo, useState, type ReactNode } from 'react';
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-import { fetchDictionaryEntries } from '@/api/requests/dictionary';
-import {
-  createDictionaryCache,
-  createDictionaryRepository,
-  createSqliteKeyValueStorage,
-  createWordsRepository,
-  WORDS_DATABASE_ASSET,
-  WORDS_DATABASE_NAME,
-} from '@/core';
 import { LoadingState } from '@/components/ui/loading-state';
+import { createWordsRepository, WORDS_DATABASE_ASSET, WORDS_DATABASE_NAME } from '@/core';
+import { startSyncTriggers } from '@/services/sync';
 
+import { dictionaryRepository, hydrateUserStores, syncEngine } from './dependencies';
 import { RepositoriesProvider } from './repositories-provider';
-
-const dictionaryRepository = createDictionaryRepository({
-  cache: createDictionaryCache(createSqliteKeyValueStorage()),
-  fetchEntries: fetchDictionaryEntries,
-});
 
 function SqliteRepositories({ children }: { children: ReactNode }) {
   const db = useSQLiteContext();
@@ -32,6 +21,9 @@ function SqliteRepositories({ children }: { children: ReactNode }) {
 
 export function AppProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
+  useState(hydrateUserStores);
+
+  useEffect(() => startSyncTriggers(syncEngine), []);
 
   return (
     <QueryClientProvider client={queryClient}>
