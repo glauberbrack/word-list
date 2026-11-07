@@ -4,3 +4,4 @@ dist
 assets
 img
 package-lock.json
+expo-env.d.ts
