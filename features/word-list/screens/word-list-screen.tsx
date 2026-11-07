@@ -1,24 +1,24 @@
-import { FlashList } from '@shopify/flash-list';
-import { router } from 'expo-router';
-import { useCallback } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useMemo } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { ErrorState } from '@/components/ui/error-state';
 import { LoadingState } from '@/components/ui/loading-state';
+import { ScreenTitle } from '@/components/ui/screen-title';
+import { WordGrid } from '@/components/word-grid/word-grid';
+import { openWordDetail } from '@/features/word-detail/actions/open-word-detail';
 import { useWordList } from '@/hooks/use-word-list';
-import { colors, spacing, typography } from '@/theme';
-
-import { WordCell } from '../components/word-cell';
-
-const COLUMNS = 3;
+import { colors, spacing } from '@/theme';
 
 export function WordListScreen() {
   const { items, isPending, isError, refetch, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useWordList();
 
-  const openWord = useCallback((entry: TWordEntry) => {
-    router.push({ pathname: '/word/[word]', params: { word: entry.word, id: String(entry.id) } });
-  }, []);
+  const gridItems = useMemo<TWordGridItem[]>(
+    () => items.map((entry) => ({ key: String(entry.id), word: entry.word, id: entry.id })),
+    [items],
+  );
+
+  const openWord = useCallback((item: TWordGridItem) => openWordDetail(item, 'list'), []);
 
   const loadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) void fetchNextPage();
@@ -31,22 +31,17 @@ export function WordListScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Word list</Text>
-      <View style={styles.grid}>
-        <FlashList
-          data={items}
-          numColumns={COLUMNS}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <WordCell entry={item} onPress={openWord} />}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isFetchingNextPage ? (
-              <ActivityIndicator style={styles.footer} color={colors.primary} />
-            ) : null
-          }
-        />
-      </View>
+      <ScreenTitle>Word list</ScreenTitle>
+      <WordGrid
+        items={gridItems}
+        onPressItem={openWord}
+        onEndReached={loadMore}
+        footer={
+          isFetchingNextPage ? (
+            <ActivityIndicator style={styles.footer} color={colors.primary} />
+          ) : null
+        }
+      />
     </View>
   );
 }
@@ -56,17 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: spacing.md,
     backgroundColor: colors.background,
-  },
-  title: {
-    ...typography.heading,
-    color: colors.text,
-    paddingVertical: spacing.md,
-  },
-  grid: {
-    flex: 1,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderLeftWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
   },
   footer: {
     paddingVertical: spacing.md,

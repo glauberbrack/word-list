@@ -2,12 +2,12 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, spacing, typography } from '@/theme';
 
-type TPlaceholderScreenProps = {
+type TEmptyStateProps = {
   title: string;
   description?: string;
 };
 
-export function PlaceholderScreen({ title, description }: TPlaceholderScreenProps) {
+export function EmptyState({ title, description }: TEmptyStateProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -19,16 +19,19 @@ export function PlaceholderScreen({ title, description }: TPlaceholderScreenProp
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: spacing.sm,
-    backgroundColor: colors.background,
+    padding: spacing.lg,
   },
   title: {
-    ...typography.heading,
+    ...typography.label,
     color: colors.text,
+    textAlign: 'center',
   },
   description: {
     ...typography.body,
     color: colors.textMuted,
+    textAlign: 'center',
   },
 });

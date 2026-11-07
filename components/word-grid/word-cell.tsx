@@ -4,22 +4,24 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 import { colors, spacing, typography } from '@/theme';
 
 type TWordCellProps = {
-  entry: TWordEntry;
-  onPress: (entry: TWordEntry) => void;
+  item: TWordGridItem;
+  onPress: (item: TWordGridItem) => void;
+  onLongPress?: (item: TWordGridItem) => void;
 };
 
 export const WORD_CELL_HEIGHT = 80;
 
-export const WordCell = memo(function WordCell({ entry, onPress }: TWordCellProps) {
+export const WordCell = memo(function WordCell({ item, onPress, onLongPress }: TWordCellProps) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={entry.word}
-      onPress={() => onPress(entry)}
+      accessibilityLabel={item.word}
+      onPress={() => onPress(item)}
+      onLongPress={onLongPress ? () => onLongPress(item) : undefined}
       style={({ pressed }) => [styles.cell, pressed && styles.cellPressed]}
     >
       <Text style={styles.label} numberOfLines={2}>
-        {entry.word}
+        {item.word}
       </Text>
     </Pressable>
   );
