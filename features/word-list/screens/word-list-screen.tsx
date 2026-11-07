@@ -16,8 +16,8 @@ export function WordListScreen() {
   const { items, isPending, isError, refetch, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useWordList();
 
-  const openWord = useCallback((word: string) => {
-    router.push({ pathname: '/word/[word]', params: { word } });
+  const openWord = useCallback((entry: TWordEntry) => {
+    router.push({ pathname: '/word/[word]', params: { word: entry.word, id: String(entry.id) } });
   }, []);
 
   const loadMore = useCallback(() => {
@@ -37,7 +37,7 @@ export function WordListScreen() {
           data={items}
           numColumns={COLUMNS}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <WordCell word={item.word} onPress={openWord} />}
+          renderItem={({ item }) => <WordCell entry={item} onPress={openWord} />}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           ListFooterComponent={
