@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { AccountButton } from '@/components/account/account-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenTitle } from '@/components/ui/screen-title';
 import { WordGrid } from '@/components/word-grid/word-grid';
@@ -15,7 +16,7 @@ export function HistoryScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle>History</ScreenTitle>
+      <ScreenTitle action={<AccountButton />}>History</ScreenTitle>
       {items.length === 0 ? (
         <EmptyState
           title="Nenhuma palavra vista ainda"
