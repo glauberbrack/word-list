@@ -8,4 +8,5 @@ declare type TFavorite = {
 declare type TFavoritesRepository = {
   getAll(): Record<string, TFavorite>;
   save(item: TFavorite): void;
+  replaceAll(items: Record<string, TFavorite>): void;
 };

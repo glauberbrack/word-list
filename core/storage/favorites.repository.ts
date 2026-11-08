@@ -12,5 +12,8 @@ export function createFavoritesRepository(
     save(item) {
       writeJson(storage, key, { ...getAll(), [item.word]: item });
     },
+    replaceAll(items) {
+      writeJson(storage, key, items);
+    },
   };
 }

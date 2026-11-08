@@ -12,5 +12,8 @@ export function createHistoryRepository(
     save(item) {
       writeJson(storage, key, { ...getAll(), [item.word]: item });
     },
+    replaceAll(items) {
+      writeJson(storage, key, items);
+    },
   };
 }

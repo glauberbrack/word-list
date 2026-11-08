@@ -6,4 +6,5 @@ declare type THistoryItem = {
 declare type THistoryRepository = {
   getAll(): Record<string, THistoryItem>;
   save(item: THistoryItem): void;
+  replaceAll(items: Record<string, THistoryItem>): void;
 };
