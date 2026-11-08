@@ -1,0 +1,23 @@
+appId: host.exp.Exponent
+name: Favoritar uma palavra e remover pela aba Favorites
+---
+- openLink: exp://127.0.0.1:8081?__expo_disable_fab=1
+- extendedWaitUntil:
+    visible: 'Word list'
+    timeout: 60000
+- tapOn: 'aardvark'
+- extendedWaitUntil:
+    visible: 'Meanings'
+    timeout: 15000
+- runFlow:
+    when:
+      visible: 'Remover dos favoritos'
+    commands:
+      - tapOn: 'Remover dos favoritos'
+- tapOn: 'Salvar nos favoritos'
+- assertVisible: 'Remover dos favoritos'
+- tapOn: 'Fechar'
+- tapOn: 'Favorites'
+- assertVisible: 'aardvark'
+- longPressOn: 'aardvark'
+- assertVisible: 'Nenhum favorito ainda'
