@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { AccountButton } from '@/components/account/account-button';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ScreenTitle } from '@/components/ui/screen-title';
 import { WordGrid } from '@/components/word-grid/word-grid';
@@ -22,7 +21,7 @@ export function FavoritesScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle action={<AccountButton />}>Favorites</ScreenTitle>
+      <ScreenTitle>Favorites</ScreenTitle>
       {items.length === 0 ? (
         <EmptyState
           title="Nenhum favorito ainda"

@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { AccountButton } from '@/components/account/account-button';
 import { ErrorState } from '@/components/ui/error-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ScreenTitle } from '@/components/ui/screen-title';
@@ -32,7 +31,7 @@ export function WordListScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle action={<AccountButton />}>Word list</ScreenTitle>
+      <ScreenTitle>Word list</ScreenTitle>
       <WordGrid
         items={gridItems}
         onPressItem={openWord}

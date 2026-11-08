@@ -2,11 +2,13 @@ import { TopTabs } from 'expo-router/js-top-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 
+import { AppHeader } from '@/components/layout/app-header';
 import { colors, typography } from '@/theme';
 
 export default function TabsLayout() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      <AppHeader />
       <TopTabs
         screenOptions={{
           tabBarActiveTintColor: colors.primary,
