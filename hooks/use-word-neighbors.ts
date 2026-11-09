@@ -6,10 +6,12 @@ import { useFavoritesStore } from '@/store/favorites.store';
 import { useHistoryStore } from '@/store/history.store';
 
 import { useAdjacentWords } from './use-adjacent-words';
+import { useWordCount } from './use-word-count';
 
 type TWordNeighbors = {
   previous: TWordLink | null;
   next: TWordLink | null;
+  position: TWordPosition | null;
 };
 
 function snapshotWords(source: TWordSource): string[] {
@@ -23,7 +25,7 @@ function snapshotWords(source: TWordSource): string[] {
 
 function neighborsFromSnapshot(words: string[], word: string): TWordNeighbors {
   const index = words.indexOf(word);
-  if (index === -1) return { previous: null, next: null };
+  if (index === -1) return { previous: null, next: null, position: null };
 
   const previous = index > 0 ? words.at(index - 1) : undefined;
   const next = words.at(index + 1);
@@ -31,17 +33,24 @@ function neighborsFromSnapshot(words: string[], word: string): TWordNeighbors {
   return {
     previous: previous ? { word: previous } : null,
     next: next ? { word: next } : null,
+    position: { index: index + 1, total: words.length },
   };
 }
 
-export function useWordNeighbors(source: TWordSource, word: string, id: number | null) {
+export function useWordNeighbors(
+  source: TWordSource,
+  word: string,
+  id: number | null,
+): TWordNeighbors {
   const [snapshot] = useState(() => snapshotWords(source));
   const adjacent = useAdjacentWords(source === 'list' ? id : null);
+  const wordCount = useWordCount();
 
   if (source !== 'list') return neighborsFromSnapshot(snapshot, word);
 
   return {
     previous: adjacent.data?.previous ?? null,
     next: adjacent.data?.next ?? null,
+    position: id === null ? null : { index: id, total: wordCount.data ?? null },
   };
 }
