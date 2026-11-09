@@ -2,16 +2,27 @@ import { useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { EmptyState } from '@/components/ui/empty-state';
-import { ScreenTitle } from '@/components/ui/screen-title';
 import { WordGrid } from '@/components/word-grid/word-grid';
 import { openWordDetail } from '@/features/word-detail/actions/open-word-detail';
-import { useFavoriteWords, useToggleFavorite } from '@/hooks/use-favorites';
+import { useCurrentTime } from '@/hooks/use-current-time';
+import { useActiveFavorites, useToggleFavorite } from '@/hooks/use-favorites';
 import { colors, spacing, typography } from '@/theme';
+import { formatRelativeTime } from '@/utils/format/relative-time';
 
 export function FavoritesScreen() {
-  const words = useFavoriteWords();
+  const favorites = useActiveFavorites();
   const toggleFavorite = useToggleFavorite();
-  const items = useMemo<TWordGridItem[]>(() => words.map((word) => ({ key: word, word })), [words]);
+  const now = useCurrentTime();
+
+  const items = useMemo<TWordGridItem[]>(
+    () =>
+      favorites.map((favorite) => ({
+        key: favorite.word,
+        word: favorite.word,
+        caption: `salva ${formatRelativeTime(favorite.createdAt, now)}`,
+      })),
+    [favorites, now],
+  );
 
   const openWord = useCallback((item: TWordGridItem) => openWordDetail(item, 'favorites'), []);
   const removeWord = useCallback(
@@ -21,7 +32,6 @@ export function FavoritesScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle>Favorites</ScreenTitle>
       {items.length === 0 ? (
         <EmptyState
           title="Nenhum favorito ainda"

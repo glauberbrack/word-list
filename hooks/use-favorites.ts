@@ -3,10 +3,16 @@ import { useMemo } from 'react';
 import { isFavoriteActive, listActiveFavorites } from '@/core/domain/favorites';
 import { useFavoritesStore } from '@/store/favorites.store';
 
-export function useFavoriteWords(): string[] {
+export function useActiveFavorites(): TFavorite[] {
   const items = useFavoritesStore((state) => state.items);
 
-  return useMemo(() => listActiveFavorites(items).map((item) => item.word), [items]);
+  return useMemo(() => listActiveFavorites(items), [items]);
+}
+
+export function useFavoriteWords(): string[] {
+  const favorites = useActiveFavorites();
+
+  return useMemo(() => favorites.map((item) => item.word), [favorites]);
 }
 
 export function useIsFavorite(word: string): boolean {
