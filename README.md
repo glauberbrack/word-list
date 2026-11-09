@@ -2,7 +2,11 @@
 
 App mobile para explorar palavras em inglês: lista com rolagem infinita, significados e fonética pela Free Dictionary API, pronúncia em áudio, favoritos e histórico guardados no aparelho e sincronizados com a conta do usuário.
 
-> This is a challenge by [Coodesh](https://coodesh.com/)
+## Apresentação
+
+Gravei um vídeo explicando o projeto como um todo: fluxo do app, arquitetura e decisões.
+
+[Assistir à apresentação](https://www.tella.tv/video/glaubers-video-5ummd5hk)
 
 ## Tecnologias
 
