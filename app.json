@@ -21,7 +21,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router", "expo-sqlite", "expo-status-bar", "expo-audio"],
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-status-bar",
+      "expo-audio",
+      "expo-font",
+      "expo-asset"
+    ],
     "scheme": "wordlist",
     "experiments": {
       "typedRoutes": true
