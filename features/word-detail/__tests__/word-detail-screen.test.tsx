@@ -153,19 +153,37 @@ describe('WordDetailScreen', () => {
     );
   });
 
-  it('navega para a próxima palavra da lista e desativa o Voltar no início', async () => {
+  it('mostra a palavra anterior e a próxima e navega pela lista', async () => {
     const { repositories } = setup(async () => ({ status: 'not_found' }));
     const user = userEvent.setup();
 
     await renderWithProviders(<WordDetailScreen word="hello" id={1} source="list" />, repositories);
 
-    const next = await screen.findByRole('button', { name: 'Próximo' });
+    const next = await screen.findByRole('button', { name: 'Próxima palavra: help' });
     await screen.findByText('Nenhuma definição encontrada para “hello” na Free Dictionary API.');
 
-    expect(screen.getByRole('button', { name: 'Voltar' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Palavra anterior' })).toBeDisabled();
+    expect(screen.getByText('início')).toBeOnTheScreen();
 
     await user.press(next);
 
     expect(router.setParams).toHaveBeenCalledWith({ word: 'help', id: '2' });
+  });
+
+  it('abre a primeira classe gramatical e expande as outras ao tocar', async () => {
+    const { repositories } = setup(async () => ({
+      status: 'found',
+      detail: toWordDetail('hello', helloEntries),
+    }));
+    const user = userEvent.setup();
+
+    await renderWithProviders(<WordDetailScreen word="hello" id={1} source="list" />, repositories);
+
+    expect(await screen.findByText('1. "Hello!" or an equivalent greeting.')).toBeOnTheScreen();
+    expect(screen.queryByText('“Hello, everyone.”')).not.toBeOnTheScreen();
+
+    await user.press(screen.getByRole('button', { name: 'Interjection, 1 definição' }));
+
+    expect(screen.getByText('“Hello, everyone.”')).toBeOnTheScreen();
   });
 });

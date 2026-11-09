@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing.md,
     padding: spacing.lg,
-    backgroundColor: colors.background,
   },
   message: {
     ...typography.body,
