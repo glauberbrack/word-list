@@ -1,7 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Pressable, StyleSheet } from 'react-native';
+import { colors } from '@/theme';
 
-import { colors, spacing } from '@/theme';
+import { RoundIconButton } from './round-icon-button';
 
 type TFavoriteButtonProps = {
   active: boolean;
@@ -10,25 +9,12 @@ type TFavoriteButtonProps = {
 
 export function FavoriteButton({ active, onPress }: TFavoriteButtonProps) {
   return (
-    <Pressable
-      accessibilityRole="button"
+    <RoundIconButton
+      icon={active ? 'star' : 'star-outline'}
+      color={colors.primary}
       accessibilityLabel={active ? 'Remover dos favoritos' : 'Salvar nos favoritos'}
-      accessibilityState={{ selected: active }}
-      hitSlop={spacing.sm}
+      selected={active}
       onPress={onPress}
-      style={styles.button}
-    >
-      <Ionicons
-        name={active ? 'star' : 'star-outline'}
-        size={26}
-        color={active ? colors.primary : colors.textMuted}
-      />
-    </Pressable>
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    padding: spacing.xs,
-  },
-});
