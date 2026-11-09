@@ -10,5 +10,6 @@ export const colors = {
   primaryStrong: '#4C1D95',
   primarySoft: '#EDE4F7',
   primaryMuted: '#6B5B8C',
+  primaryTrack: '#DDD3F0',
   danger: '#DC2626',
 } as const;

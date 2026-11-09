@@ -15,67 +15,89 @@ const SOURCE_LABELS: Record<TPronunciationSource, string> = {
   'speech-unavailable': 'Áudio da API indisponível: voz do aparelho',
 };
 
+const BAR_COUNT = 26;
+const BAR_HEIGHTS = Array.from({ length: BAR_COUNT }, (_, index) =>
+  Math.round(8 + Math.abs(Math.sin(index * 1.7)) * 18),
+);
+const BUTTON_SIZE = 36;
+
 export function PronunciationPlayer({ word, audioUrl }: TPronunciationPlayerProps) {
   const { source, isPlaying, progress, toggle } = usePronunciationPlayer(word, audioUrl);
+  const playedBars = Math.round(progress * BAR_COUNT);
 
   return (
-    <View style={styles.container}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={isPlaying ? 'Pausar pronúncia' : 'Ouvir pronúncia'}
-        hitSlop={spacing.sm}
-        onPress={toggle}
-        style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-      >
-        <Ionicons name={isPlaying ? 'pause' : 'play'} size={22} color={colors.background} />
-      </Pressable>
-      <View style={styles.info}>
+    <View>
+      <View style={styles.player}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={isPlaying ? 'Pausar pronúncia' : 'Ouvir pronúncia'}
+          hitSlop={spacing.sm}
+          onPress={toggle}
+          style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+        >
+          <Ionicons name={isPlaying ? 'pause' : 'play'} size={16} color={colors.card} />
+        </Pressable>
         <View
-          style={styles.track}
+          style={styles.wave}
           accessibilityRole="progressbar"
           accessibilityValue={{ min: 0, max: 100, now: Math.round(progress * 100) }}
         >
-          <View style={[styles.fill, { width: `${progress * 100}%` }]} />
+          {BAR_HEIGHTS.map((height, index) => (
+            <View
+              key={index}
+              style={[
+                styles.bar,
+                {
+                  height,
+                  backgroundColor: index < playedBars ? colors.primary : colors.primaryTrack,
+                },
+              ]}
+            />
+          ))}
         </View>
-        <Text style={styles.caption}>{SOURCE_LABELS[source]}</Text>
       </View>
+      <Text style={styles.caption}>{SOURCE_LABELS[source]}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  player: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.md - 4,
+    paddingVertical: spacing.sm + 2,
+    paddingHorizontal: spacing.md - 4,
+    borderRadius: radius.lg,
+    backgroundColor: colors.background,
   },
   button: {
-    width: 44,
-    height: 44,
+    width: BUTTON_SIZE,
+    height: BUTTON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 22,
+    borderRadius: radius.full,
     backgroundColor: colors.primary,
   },
   buttonPressed: {
     opacity: 0.8,
   },
-  info: {
+  wave: {
     flex: 1,
-    gap: spacing.xs,
+    height: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  track: {
-    height: 6,
-    overflow: 'hidden',
-    borderRadius: radius.sm,
-    backgroundColor: colors.surface,
-  },
-  fill: {
-    height: '100%',
-    backgroundColor: colors.primary,
+  bar: {
+    width: 4,
+    borderRadius: 2,
   },
   caption: {
-    ...typography.caption,
-    color: colors.textMuted,
+    ...typography.micro,
+    fontSize: 12,
+    color: colors.textSubtle,
+    textAlign: 'center',
+    marginTop: spacing.sm,
   },
 });
