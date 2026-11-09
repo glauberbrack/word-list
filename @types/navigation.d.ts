@@ -7,4 +7,5 @@ declare type TWordLink = {
 
 declare type TWordGridItem = TWordLink & {
   key: string;
+  caption?: string;
 };

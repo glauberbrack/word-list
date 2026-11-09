@@ -2,9 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import type { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { colors } from '@/theme';
-
-import { WordCell } from './word-cell';
+import { WORD_CELL_GAP, WordCell } from './word-cell';
 
 const COLUMNS = 3;
 
@@ -43,8 +41,6 @@ export function WordGrid({
 const styles = StyleSheet.create({
   grid: {
     flex: 1,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderLeftWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.border,
+    marginHorizontal: -WORD_CELL_GAP / 2,
   },
 });
