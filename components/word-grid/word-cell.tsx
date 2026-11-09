@@ -29,7 +29,7 @@ export const WordCell = memo(function WordCell({ item, onPress, onLongPress }: T
         {isFavorite ? (
           <Ionicons name="star" size={14} color={colors.primary} style={styles.star} />
         ) : null}
-        <Text style={styles.word} numberOfLines={2}>
+        <Text style={styles.word} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
           {item.word}
         </Text>
         {item.caption ? <Text style={styles.caption}>{item.caption}</Text> : null}
