@@ -1,11 +1,10 @@
 import { coalesceOperation } from '../domain/sync';
 import { readJson, writeJson } from './json-storage';
 
-const QUEUE_KEY = 'sync:queue';
-
-export function createSyncQueue(storage: TKeyValueStorage): TSyncQueue {
-  const getAll = () => readJson<TSyncOperation[]>(storage, QUEUE_KEY, []);
-  const write = (operations: TSyncOperation[]) => writeJson(storage, QUEUE_KEY, operations);
+export function createSyncQueue(storage: TKeyValueStorage, getUserId: () => string): TSyncQueue {
+  const key = () => `sync:queue:${getUserId()}`;
+  const getAll = () => readJson<TSyncOperation[]>(storage, key(), []);
+  const write = (operations: TSyncOperation[]) => writeJson(storage, key(), operations);
 
   return {
     getAll,

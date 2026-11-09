@@ -24,6 +24,7 @@ import { useHistoryStore } from '@/store/history.store';
 import { useToastStore } from '@/store/toast.store';
 
 const keyValueStorage = createSqliteKeyValueStorage();
+let activeUserId = LOCAL_USER_ID;
 const supabase = createSupabaseClient();
 const authGateway = supabase ? createSupabaseAuthGateway(supabase) : null;
 const remoteUserData = supabase ? createSupabaseRemoteUserData(supabase) : null;
@@ -39,7 +40,7 @@ export const dictionaryRepository = createDictionaryRepository({
 });
 
 export const syncEngine = createSyncEngine({
-  queue: createSyncQueue(keyValueStorage),
+  queue: createSyncQueue(keyValueStorage, () => activeUserId),
   transport,
   onPermanentFailure(operation) {
     if (operation.entity !== 'favorite') return;
@@ -50,6 +51,7 @@ export const syncEngine = createSyncEngine({
 });
 
 export function hydrateUserStores(userId = LOCAL_USER_ID) {
+  activeUserId = userId;
   useFavoritesStore.getState().hydrate({
     repository: createFavoritesRepository(keyValueStorage, userId),
     sync: syncEngine,

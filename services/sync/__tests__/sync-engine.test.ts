@@ -6,7 +6,7 @@ import { createSyncEngine, SYNC_DEBOUNCE_MS } from '../sync-engine';
 
 function setup(push: jest.Mock) {
   const { storage } = createMemoryKeyValueStorage();
-  const queue = createSyncQueue(storage);
+  const queue = createSyncQueue(storage, () => 'local');
   const onPermanentFailure = jest.fn();
   const engine = createSyncEngine({
     queue,
