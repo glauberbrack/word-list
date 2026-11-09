@@ -18,4 +18,5 @@ declare type TWordDirection = 'previous' | 'next';
 declare type TWordsRepository = {
   getPage(params: TWordsPageParams): Promise<TWordsPage>;
   getAdjacent(id: number, direction: TWordDirection): Promise<TWordEntry | null>;
+  count(): Promise<number>;
 };

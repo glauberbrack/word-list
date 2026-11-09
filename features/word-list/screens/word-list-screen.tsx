@@ -3,7 +3,6 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { ErrorState } from '@/components/ui/error-state';
 import { LoadingState } from '@/components/ui/loading-state';
-import { ScreenTitle } from '@/components/ui/screen-title';
 import { WordGrid } from '@/components/word-grid/word-grid';
 import { openWordDetail } from '@/features/word-detail/actions/open-word-detail';
 import { useWordList } from '@/hooks/use-word-list';
@@ -31,7 +30,6 @@ export function WordListScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle>Word list</ScreenTitle>
       <WordGrid
         items={gridItems}
         onPressItem={openWord}

@@ -56,6 +56,7 @@ function setup(getWord: TDictionaryRepository['getWord']) {
     dictionary: { getWord: jest.fn(getWord) },
     words: {
       getPage: jest.fn(),
+      count: jest.fn(),
       getAdjacent: jest.fn(async (id: number, direction: TWordDirection) =>
         direction === 'next' ? { id: id + 1, word: 'help' } : null,
       ),

@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/ui/empty-state';
-import { ScreenTitle } from '@/components/ui/screen-title';
 import { WordGrid } from '@/components/word-grid/word-grid';
 import { openWordDetail } from '@/features/word-detail/actions/open-word-detail';
 import { useHistoryWords } from '@/hooks/use-history';
@@ -15,7 +14,6 @@ export function HistoryScreen() {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle>History</ScreenTitle>
       {items.length === 0 ? (
         <EmptyState
           title="Nenhuma palavra vista ainda"

@@ -1,13 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 import { useAuthStore } from '@/store/auth.store';
-import { colors, spacing, typography } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
+
+const AVATAR_SIZE = 42;
 
 export function AccountButton() {
-  const status = useAuthStore((state) => state.status);
-  const signedIn = status === 'signed-in';
+  const signedIn = useAuthStore((state) => state.status === 'signed-in');
 
   return (
     <Pressable
@@ -15,29 +16,27 @@ export function AccountButton() {
       accessibilityLabel={signedIn ? 'Minha conta' : 'Entrar'}
       hitSlop={spacing.sm}
       onPress={() => router.push('/account')}
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.avatar, pressed && styles.pressed]}
     >
       <Ionicons
         name={signedIn ? 'person-circle' : 'person-circle-outline'}
-        size={22}
+        size={26}
         color={colors.primary}
       />
-      <Text style={styles.label}>{signedIn ? 'Conta' : 'Entrar'}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    flexDirection: 'row',
+  avatar: {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
     alignItems: 'center',
-    gap: spacing.xs,
+    justifyContent: 'center',
+    borderRadius: radius.full,
+    backgroundColor: colors.primarySoft,
   },
   pressed: {
-    opacity: 0.6,
-  },
-  label: {
-    ...typography.label,
-    color: colors.primary,
+    opacity: 0.7,
   },
 });

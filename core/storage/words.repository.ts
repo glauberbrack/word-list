@@ -20,5 +20,9 @@ export function createWordsRepository(db: SQLiteDatabase): TWordsRepository {
     getAdjacent(id, direction) {
       return db.getFirstAsync<TWordEntry>(ADJACENT_QUERIES[direction], [id]);
     },
+    async count() {
+      const row = await db.getFirstAsync<{ total: number }>('SELECT COUNT(*) AS total FROM words');
+      return row?.total ?? 0;
+    },
   };
 }
